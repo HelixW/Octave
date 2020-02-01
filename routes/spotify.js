@@ -52,6 +52,34 @@ router.get('/callback', (req, res) => {
   });
 });
 
+// function to regenerate application tokens
+router.get('/refresh', (req, res) => {
+  const param = {
+    method: 'POST',
+    uri: 'https://accounts.spotify.com/api/token',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    form: {
+      grant_type: 'refresh_token',
+      refresh_token: spotify.getRefreshToken(),
+      client_id: spotify.clientId,
+      client_secret: spotify.clientSecret,
+    },
+  };
+  request(param, (error, response, body) => {
+    if (response.statusCode == 200) {
+      spotify.saveAccessToken(JSON.parse(body).access_token);
+      logger.info('Saved Renewed Access Token');
+      res.json({
+        success: 1,
+      });
+    } else {
+      logger.error('Error Refreshing Access Code');
+    }
+  });
+});
+
 router.get('/expose', (req, res) => {
   res.json({
     access_token: spotify.getAccessToken(),
