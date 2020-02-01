@@ -42,11 +42,40 @@ Spotify.prototype.getTokenCreationTime = function() {
 Spotify.prototype.searchTrack = function(q) {
   return {
     method: 'GET',
-    uri: 'https://api.spotify.com/v1/search?type=track&q=' + q,
+    uri: `https://api.spotify.com/v1/search?type=track&limit=${process.env.TRACK_RETURN_LIMIT}&q=${q}`,
     headers: {
       Authorization: 'Bearer ' + this.getAccessToken(),
     },
   };
+};
+
+Spotify.prototype.processTracks = function(data) {
+  data = JSON.parse(data);
+  let processedData = [];
+  data.tracks.items.forEach(q => {
+    // append all artist names
+    let artists = [];
+    q.artists.forEach(v => {
+      artists.push(v.name);
+    });
+
+    // check if album art exists
+    let image = null;
+    if (q.album.images) {
+      image = q.album.images;
+    }
+
+    processedData.push({
+      name: q.name,
+      artist: artists,
+      explicit: q.explicit,
+      popularity: q.popularity,
+      media: image,
+      url: q.external_urls.spotify,
+    });
+  });
+  return processedData;
+  //   return data;
 };
 
 module.exports = new Spotify();

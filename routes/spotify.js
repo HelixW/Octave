@@ -86,13 +86,11 @@ router.get('/search', (req, res) => {
     spotify.searchTrack(req.query.q),
     (error, response, body) => {
       if (response.statusCode == 200) {
-        logger.info(
-          `Song Fetch Successful for string: ${req.query.q}`,
-        );
+        res.json(spotify.processTracks(body));
       } else {
         logger.error(`Could not search for string: ${req.query.q}`);
+        res.json(JSON.parse(body));
       }
-      return res.json(JSON.parse(body));
     },
   );
 });
