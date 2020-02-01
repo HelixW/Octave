@@ -80,6 +80,23 @@ router.get('/refresh', (req, res) => {
   });
 });
 
+// route to test song search
+router.get('/search', (req, res) => {
+  request(
+    spotify.searchTrack(req.query.q),
+    (error, response, body) => {
+      if (response.statusCode == 200) {
+        logger.info(
+          `Song Fetch Successful for string: ${req.query.q}`,
+        );
+      } else {
+        logger.error(`Could not search for string: ${req.query.q}`);
+      }
+      return res.json(JSON.parse(body));
+    },
+  );
+});
+
 router.get('/expose', (req, res) => {
   res.json({
     access_token: spotify.getAccessToken(),

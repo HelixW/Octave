@@ -38,4 +38,15 @@ Spotify.prototype.getTokenCreationTime = function() {
   return this.tokenCreationTime;
 };
 
+// function to return config to pass to request to search for track
+Spotify.prototype.searchTrack = function(q) {
+  return {
+    method: 'GET',
+    uri: 'https://api.spotify.com/v1/search?type=track&q=' + q,
+    headers: {
+      Authorization: 'Bearer ' + this.getAccessToken(),
+    },
+  };
+};
+
 module.exports = new Spotify();
