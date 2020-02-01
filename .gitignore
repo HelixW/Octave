@@ -12,7 +12,8 @@ Desktop.ini
 .directory
 *~
 
-
+#Editor
+.vscode
 # npm
 node_modules
 package-lock.json
@@ -25,3 +26,6 @@ coverage
 
 # Benchmarking
 benchmarks/graphs
+
+#env
+.env

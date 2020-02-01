@@ -12,21 +12,30 @@ Spotify.prototype.getOAuthUrl = function() {
   return `https://accounts.spotify.com/authorize?client_id=${this.clientId}&redirect_uri=${this.redirectUri}&response_type=code&scope=user-read-private`;
 };
 
-// function to store code received from
-Spotify.prototype.storeCode = function(code) {
-  this.code = code;
-};
-
-Spotify.prototype.getCode = function() {
-  return this.code;
-};
-
 // function to save access token
 Spotify.prototype.saveAccessToken = function(code) {
+  this.setTokenCreationTime();
   this.access_token = code;
 };
 Spotify.prototype.getAccessToken = function() {
   return this.access_token;
 };
 
-module.exports = Spotify;
+// function to interact with refresh tokens
+Spotify.prototype.saveRefreshToken = function(code) {
+  this.refresh_token = code;
+};
+Spotify.prototype.getRefreshToken = function() {
+  return this.refresh_token;
+};
+
+// save time of creation
+Spotify.prototype.setTokenCreationTime = function() {
+  this.tokenCreationTime = Math.floor(new Date().getTime() / 1000);
+};
+
+Spotify.prototype.getTokenCreationTime = function() {
+  return this.tokenCreationTime;
+};
+
+module.exports = new Spotify();
