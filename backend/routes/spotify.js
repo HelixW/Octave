@@ -10,6 +10,8 @@ const request = require('request');
 const fs = require('fs');
 const spotify = require('./../bin/spotify/spotify');
 const logger = require('./../bin/logger/logger');
+const database = require('./../bin/database/connect');
+const TokenStorage = require('./../bin/database/tokens.schema');
 
 const router = express.Router();
 
@@ -18,22 +20,27 @@ router.get('/', (req, res) => {
 	res.json(req.query);
 });
 
+// route to initiate token generation process
 router.get('/step1', (req, res) => {
-
-	// if local tokens are stored
-	if (fs.existsSync(process.env.LOCAL_FILE_NAME)) {
-		logger.info('Local Tokens flound, loading');
-
-		// parse the data from local file
-		const data = JSON.parse(fs.readFileSync(process.env.LOCAL_FILE_NAME, 'utf8'));
-		spotify.saveAccessToken(data.access_token);
-		spotify.saveRefreshToken(data.refresh_token);
-
-		// send response to user
-		res.send('Local tokes loaded');
-	} else {
-		return res.redirect(spotify.getOAuthUrl());
-	}
+	TokenStorage.findOne({}, (err, tokens) => {
+		if (err) {
+			res.json({
+				error: err
+			});
+			logger.error(`Error Exposing Tokens ${err}`);
+		} else if (tokens == null) {
+			logger.info(`No Tokens found in DB. Triggering Creation`)
+			return res.redirect(spotify.getOAuthUrl());
+		}
+		else {
+			spotify.saveAccessToken(tokens.access_token);
+			spotify.saveRefreshToken(tokens.refresh_token)
+			logger.info(`Tokens Loaded from DB`);
+			return res.json({
+				status: `Loaded from DB`
+			});
+		}
+	});
 });
 
 // router to handle callback from server
@@ -58,17 +65,33 @@ router.get('/callback', (req, res) => {
 	request(param, (err, response, body) => {
 		if (response.statusCode == 200) {
 			res.json(JSON.parse(body));
-			spotify.saveAccessToken(JSON.parse(body).access_token);
-			spotify.saveRefreshToken(JSON.parse(body).refresh_token);
+			const access_token = JSON.parse(body).access_token;
+			const refresh_token = JSON.parse(body).refresh_token;
 
-			//   now save the data locally
-			const data = JSON.stringify({
-				access_token: spotify.getAccessToken(),
-				refresh_token: spotify.getRefreshToken(),
+			spotify.saveAccessToken(access_token);
+			spotify.saveRefreshToken(refresh_token);
+
+			// write entries to database;
+			const tokenStorage = new TokenStorage({
+				access_token: access_token,
+				refresh_token: refresh_token,
 			});
-			fs.writeFileSync(process.env.LOCAL_FILE_NAME, data, 'utf8');
-			logger.info('Saved Access Tokens and Refresh Tokens to local file');
 
+			// delete any old token stored
+			TokenStorage.deleteOne({}, (err) => {
+				if (err) {
+					logger.error(`Error Flushing Tokens ${err}`);
+				}
+			});
+
+			// now save the new tokens
+			tokenStorage.save((err, data) => {
+				if (err) {
+					logger.error(`Error syncing Tokens ${err}`);
+				} else {
+					logger.info('Tokens saved to database');
+				}
+			});
 		} else {
 			logger.error('Invalid Response from Spotify API');
 		}
@@ -96,6 +119,7 @@ router.get('/refresh', (req, res) => {
 			logger.info('Saved Renewed Access Token');
 			res.json({
 				success: 1,
+				body: JSON.parse(body)
 			});
 		} else {
 			logger.error('Error Refreshing Access Code');
@@ -118,11 +142,44 @@ router.get('/search', (req, res) => {
 	);
 });
 
+// function to display currently saved tokens
 router.get('/expose', (req, res) => {
-	res.json({
-		access_token: spotify.getAccessToken(),
-		refresh_token: spotify.getRefreshToken(),
-		creation_time: spotify.getTokenCreationTime(),
+	// query database for token, and dispaly
+	TokenStorage.findOne({}, (err, tokens) => {
+		if (err) {
+			res.json({
+				error: err
+			});
+			logger.error(`Error Exposing Tokens ${err}`);
+		} else if (tokens == null) {
+			// when no tokens in db
+			logger.info(`No Tokens found in DB. Triggering Creation`)
+			return res.redirect(spotify.getOAuthUrl());
+		} else {
+			res.json({
+				access_token: tokens.access_token,
+				refresh_token: tokens.refresh_token,
+				created_at: tokens.createdAt,
+			});
+			logger.info(`Tokens Exposed`);
+		}
+	});
+});
+
+router.get(`/${process.env.FLUSH_ROUTE}`, (req, res) => {
+	// delete any old token stored
+	TokenStorage.deleteOne({}, (err) => {
+		if (err) {
+			logger.error(`Error Flushing Tokens ${err}`);
+			res.json({
+				status: 'NOT OK',
+			});
+		} else {
+			logger.info(`Tokens Flushed`);
+			res.json({
+				status: 'OK',
+			});
+		}
 	});
 });
 
