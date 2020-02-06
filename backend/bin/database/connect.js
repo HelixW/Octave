@@ -5,6 +5,8 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const logger = require('./../logger/logger');
 
+logger.info(`mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}/${process.env.DB_NAME}`);
+
 // define an instance of database
 class Database {
 	constructor() {
@@ -14,7 +16,7 @@ class Database {
 	_connect() {
 		mongoose
 			.connect(
-				`mongodb://${process.env.DB_HOST}/${process.env.DB_NAME}`,
+				`mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}/${process.env.DB_NAME}`,
 				{
 					useNewUrlParser: true,
 					useUnifiedTopology: true,
@@ -26,6 +28,7 @@ class Database {
 			})
 			.catch((err) => {
 				logger.error('Database connection error');
+				logger.error(err);
 			});
 	}
 }
