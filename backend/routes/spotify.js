@@ -8,33 +8,48 @@ require('dotenv').config();
 const express = require('express');
 const request = require('request');
 const fs = require('fs');
+
+// load spotify wrapper for all operations related to API
 const spotify = require('./../bin/spotify/spotify');
+
+// load logger
 const logger = require('./../bin/logger/logger');
-const database = require('./../bin/database/connect');
+
+// load TokenStorage Database schema
+const database = require('./../bin/database/connect')
 const TokenStorage = require('./../bin/database/tokens.schema');
 
+// create instance of Router
 const router = express.Router();
 
-// define routes
+// Nothing Much to handle on homepage
 router.get('/', (req, res) => {
 	res.json(req.query);
 });
 
-// route to initiate token generation process
+// First Step towards token management, needs to be triggered when app starts
 router.get('/step1', (req, res) => {
+
+	// will find the token stored in DB
 	TokenStorage.findOne({}, (err, tokens) => {
+		// if error, log into console
 		if (err) {
 			res.json({
 				error: err
 			});
 			logger.error(`Error Exposing Tokens ${err}`);
+
 		} else if (tokens == null) {
+			// if collection empty, trigger creation to new tokens
 			logger.info(`No Tokens found in DB. Triggering Creation`)
 			return res.redirect(spotify.getOAuthUrl());
 		}
 		else {
+			// if collection not empty, transfer tokens to local object
 			spotify.saveAccessToken(tokens.access_token);
-			spotify.saveRefreshToken(tokens.refresh_token)
+			spotify.saveRefreshToken(tokens.refresh_token);
+
+			// log changes to console
 			logger.info(`Tokens Loaded from DB`);
 			return res.json({
 				status: `Loaded from DB`
@@ -43,9 +58,9 @@ router.get('/step1', (req, res) => {
 	});
 });
 
-// router to handle callback from server
+// router to handle callback from server, to save tokens
 router.get('/callback', (req, res) => {
-	//   prepare parameters to make request
+	// prepare parameters to make request
 	const param = {
 		method: 'POST',
 		uri: 'https://accounts.spotify.com/api/token',
@@ -61,30 +76,37 @@ router.get('/callback', (req, res) => {
 		},
 	};
 
-	// make request to server
+	// make request to server to get tokens
 	request(param, (err, response, body) => {
 		if (response.statusCode == 200) {
+			// when status OK
+
+			// parse the body received
 			res.json(JSON.parse(body));
+
+			// store access_token and refresh_token
 			const access_token = JSON.parse(body).access_token;
 			const refresh_token = JSON.parse(body).refresh_token;
 
+			// sync tokens to local object
 			spotify.saveAccessToken(access_token);
 			spotify.saveRefreshToken(refresh_token);
 
-			// write entries to database;
-			const tokenStorage = new TokenStorage({
-				access_token: access_token,
-				refresh_token: refresh_token,
-			});
-
-			// delete any old token stored
+			// flush any old token stored in  DB
 			TokenStorage.deleteOne({}, (err) => {
 				if (err) {
 					logger.error(`Error Flushing Tokens ${err}`);
 				}
 			});
 
-			// now save the new tokens
+			// to sync entries to database, populate model
+			const tokenStorage = new TokenStorage({
+				access_token: access_token,
+				refresh_token: refresh_token,
+			});
+
+
+			// sync model with database
 			tokenStorage.save((err, data) => {
 				if (err) {
 					logger.error(`Error syncing Tokens ${err}`);
@@ -93,13 +115,15 @@ router.get('/callback', (req, res) => {
 				}
 			});
 		} else {
+			// if invalid response from API, report to console.
 			logger.error('Invalid Response from Spotify API');
 		}
 	});
 });
 
-// function to regenerate application tokens
+// route to regenerate token
 router.get('/refresh', (req, res) => {
+	// prepare parameters to make request
 	const param = {
 		method: 'POST',
 		uri: 'https://accounts.spotify.com/api/token',
@@ -113,16 +137,36 @@ router.get('/refresh', (req, res) => {
 			client_secret: spotify.clientSecret,
 		},
 	};
+
+	// make request to server with params
 	request(param, (error, response, body) => {
 		if (response.statusCode == 200) {
-			spotify.saveAccessToken(JSON.parse(body).access_token);
-			logger.info('Saved Renewed Access Token');
+			// if status OK, save access_token to local object
+			const access_token = JSON.parse(body).access_token;
+			spotify.saveAccessToken(access_token);
+
+			// update database with new token
+			TokenStorage.findOneAndUpdate({}, {
+				access_token: access_token
+			}, (err) => {
+				// log into console if error
+				if (err) {
+					logger.info(`Error Syncing New Token with DB`);
+				} else {
+					// log success operation
+					logger.info(`New Token Synced with DB`);
+				}
+			});
+
+			// send status to user
 			res.json({
 				success: 1,
-				body: JSON.parse(body)
+				newAccessToken: access_token,
 			});
 		} else {
-			logger.error('Error Refreshing Access Code');
+			// handle non 200 response from server
+			logger.error(`Error Refreshing Access Code`);
+			res.end();
 		}
 	});
 });
@@ -142,7 +186,7 @@ router.get('/search', (req, res) => {
 	);
 });
 
-// function to display currently saved tokens
+// route to display currently operational tokens
 router.get('/expose', (req, res) => {
 	// query database for token, and dispaly
 	TokenStorage.findOne({}, (err, tokens) => {
@@ -152,10 +196,11 @@ router.get('/expose', (req, res) => {
 			});
 			logger.error(`Error Exposing Tokens ${err}`);
 		} else if (tokens == null) {
-			// when no tokens in db
+			// when no tokens in db, tigger creation of new
 			logger.info(`No Tokens found in DB. Triggering Creation`)
 			return res.redirect(spotify.getOAuthUrl());
 		} else {
+			// display tokens to end user
 			res.json({
 				access_token: tokens.access_token,
 				refresh_token: tokens.refresh_token,
@@ -166,6 +211,8 @@ router.get('/expose', (req, res) => {
 	});
 });
 
+
+// route to flush currently existing tokens
 router.get(`/${process.env.FLUSH_ROUTE}`, (req, res) => {
 	// delete any old token stored
 	TokenStorage.deleteOne({}, (err) => {
@@ -183,4 +230,5 @@ router.get(`/${process.env.FLUSH_ROUTE}`, (req, res) => {
 	});
 });
 
+// export everything !
 module.exports = router;

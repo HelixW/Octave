@@ -18,6 +18,7 @@ class Database {
 				{
 					useNewUrlParser: true,
 					useUnifiedTopology: true,
+					useFindAndModify: false,
 				},
 			)
 			.then(() => {
