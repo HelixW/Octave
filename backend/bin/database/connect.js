@@ -5,8 +5,6 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const logger = require('./../logger/logger');
 
-logger.info(`mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}/${process.env.DB_NAME}`);
-
 // define an instance of database
 class Database {
 	constructor() {
