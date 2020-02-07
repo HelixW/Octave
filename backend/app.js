@@ -21,6 +21,7 @@ const database = require('./bin/database/connect');
 // load routes for various handles
 const spotifyRoutes = require('./routes/spotifyRoutes');
 const apiRoutes = require('./routes/apiRoutes');
+const landingPageRoutes = require('./routes/landingPageRoutes');
 
 // parse valid requests only
 app.use(
@@ -32,8 +33,9 @@ app.use(
 app.use(bodyparser.json());
 
 // bind routes to application
-app.use('/spotify', spotifyRoutes);
+app.use('/', landingPageRoutes);
 app.use('/api', apiRoutes);
+app.use('/spotify', spotifyRoutes);
 
 // start listening on ports
 app.listen(port, () => {
