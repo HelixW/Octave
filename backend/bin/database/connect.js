@@ -14,7 +14,7 @@ class Database {
   _connect() {
     mongoose
       .connect(
-        `mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}/${process.env.DB_NAME}`,
+        `mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}/${process.env.DB_NAME}?${process.env.DB_PARAM}`,
         {
           useNewUrlParser: true,
           useUnifiedTopology: true,
