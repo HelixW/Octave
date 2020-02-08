@@ -3,7 +3,7 @@ require('dotenv').config();
 
 // load mongoose wrapper
 const mongoose = require('mongoose');
-const logger = require('./../logger/winston');
+const logger = require('./../logger/logger');
 
 // define an instance of database
 class Database {

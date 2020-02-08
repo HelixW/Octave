@@ -19,8 +19,9 @@ const port = process.env.PORT || 3000;
 const database = require('./bin/database/connect');
 
 // load routes for various handles
-const spotifyRoutes = require('./routes/spotifyRoutes');
 const apiRoutes = require('./routes/apiRoutes');
+const googleRoutes = require('./routes/googleRoutes');
+const spotifyRoutes = require('./routes/spotifyRoutes');
 const landingPageRoutes = require('./routes/landingPageRoutes');
 
 // parse valid requests only
@@ -36,6 +37,7 @@ app.use(bodyparser.json());
 app.use('/', landingPageRoutes);
 app.use('/api', apiRoutes);
 app.use('/spotify', spotifyRoutes);
+app.use('/google', googleRoutes);
 
 // start listening on ports
 app.listen(port, () => {
