@@ -11,13 +11,55 @@ const request = require('request');
 // load spotify wrapper for all operations related to API
 const spotify = require('./../bin/spotify/spotify');
 
-spotify.seed();
+// load google items
+const google = require('./../bin/google/google');
 
 // load logger
 const logger = require('./../bin/logger/logger');
 
+// seed objects with environment data
+spotify.seed();
+google.seed();
+
 // create instance of Router
 const router = express.Router();
+
+// define a middleware to check authentication
+router.use((req, res, next) => {
+  logger.info('Middleware working');
+
+  //   if no header is present, then return error
+  if (!req.headers.authorization) {
+    return res.status(403).json({
+      error: true,
+      message: 'Not allowed without headers',
+    });
+  }
+
+  //   try ripping apart the header to see if data sent in correct format
+  const auth = req.headers.authorization.split(' ');
+  if (auth.length !== 2) {
+    logger.error('Invalid Header String Sent');
+    return res.status(403).json({
+      error: true,
+      message: 'Invalid Header String',
+    });
+  }
+
+  // extract jwt from header
+  const data = google.decodeToken(auth[1]);
+  if (data.error !== false) {
+    return res.status(403).json({
+      error: true,
+      message: 'Trouble Decoding Token',
+    });
+  }
+
+  //   now our const data has the data we need
+  req.profile = data;
+  logger.info('Middleware Test Success');
+  next();
+});
 
 // route to /api. shows welcome message, and (maybe) other stuff too
 router.get('/', (req, res) => {
