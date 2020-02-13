@@ -3,15 +3,17 @@ const mongoose = require('mongoose');
 // define attributes for a track
 const track = new mongoose.Schema(
   {
+    id: {
+      type: String,
+      required: true,
+    },
     title: {
       type: String,
       required: true,
     },
     artists: [
       {
-        name: {
-          type: String,
-        },
+        type: String,
       },
     ],
     explicit: {
@@ -42,6 +44,15 @@ const track = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    upvotes: {
+      type: Number,
+      default: 0,
+    },
+    upvoters: [
+      {
+        type: String,
+      },
+    ],
   },
   {
     timestamps: true,

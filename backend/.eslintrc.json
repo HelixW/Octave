@@ -12,6 +12,7 @@
   "parserOptions": {
     "ecmaVersion": 2018
   },
+  "ignorePatterns": ["node_modules/", "*.test.js"],
   "rules": {
     // "indent": ["error", "tab"],
     // "no-tabs": ["error", { "allowIndentationTabs": true }],

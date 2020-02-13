@@ -97,7 +97,8 @@ Google.prototype.generateToken = (user, state) => {
 // function to decode JWT's
 Google.prototype.decodeToken = (token) => {
   try {
-    logger.info('Attempting to decode token');
+    //   being too verbose
+    // logger.info('Attempting to decode token');
     return {
       error: false,
       payload: jwt.verify(token, this.jwtSecret),

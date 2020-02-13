@@ -31,6 +31,7 @@ Spotify.prototype.getAccessToken = function() {
 Spotify.prototype.saveRefreshToken = function(code) {
   this.refresh_token = code;
 };
+
 Spotify.prototype.getRefreshToken = function() {
   return this.refresh_token;
 };
@@ -50,7 +51,18 @@ Spotify.prototype.searchTrack = function(q) {
     method: 'GET',
     uri: `https://api.spotify.com/v1/search?type=track&limit=${process.env.TRACK_RETURN_LIMIT}&q=${q}`,
     headers: {
-      Authorization: 'Bearer ' + this.getAccessToken(),
+      Authorization: `Bearer ${this.getAccessToken()}`,
+    },
+  };
+};
+
+// function to get data about particular track
+Spotify.prototype.getTrackFromId = function(id) {
+  return {
+    method: 'GET',
+    uri: `https://api.spotify.com/v1/tracks/${id}`,
+    headers: {
+      Authorization: `Bearer ${this.getAccessToken()}`,
     },
   };
 };
@@ -72,6 +84,7 @@ Spotify.prototype.processTracks = function(data) {
     }
 
     processedData.push({
+      id: q.id,
       name: q.name,
       artist: artists,
       explicit: q.explicit,
@@ -82,6 +95,33 @@ Spotify.prototype.processTracks = function(data) {
   });
   return processedData;
   //   return data;
+};
+
+Spotify.prototype.processTrack = function(q) {
+  q = JSON.parse(q);
+  // append all artist names
+  let artists = [];
+  q.artists.forEach((v) => {
+    artists.push(v.name);
+  });
+
+  // check if album art exists
+  let image = null;
+  if (q.album.images) {
+    image = q.album.images;
+  }
+
+  const processedData = {
+    id: q.id,
+    name: q.name,
+    artist: artists,
+    explicit: q.explicit,
+    popularity: q.popularity,
+    media: image,
+    url: q.external_urls.spotify,
+  };
+
+  return processedData;
 };
 
 // function to automatically seed spotify with tokens when object created
