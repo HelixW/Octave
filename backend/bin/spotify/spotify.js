@@ -15,7 +15,9 @@ function Spotify() {
 
 // function to return login url
 Spotify.prototype.getOAuthUrl = function() {
-  return `https://accounts.spotify.com/authorize?client_id=${this.clientId}&redirect_uri=${this.redirectUri}&response_type=code&scope=user-read-private`;
+  const scopes =
+    'ugc-image-upload,user-read-playback-state,user-modify-playback-state,user-read-currently-playing,streaming,app-remote-control,user-read-email,user-read-private,playlist-read-collaborative,playlist-modify-public,playlist-read-private,playlist-modify-private,user-library-modify,user-library-read,user-top-read,user-read-recently-played,user-follow-read,user-follow-modify';
+  return `https://accounts.spotify.com/authorize?client_id=${this.clientId}&redirect_uri=${this.redirectUri}&response_type=code&scope=${scopes}`;
 };
 
 // function to save access token
@@ -23,6 +25,7 @@ Spotify.prototype.saveAccessToken = function(code) {
   this.setTokenCreationTime();
   this.access_token = code;
 };
+
 Spotify.prototype.getAccessToken = function() {
   return this.access_token;
 };
