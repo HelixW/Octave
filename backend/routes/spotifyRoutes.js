@@ -24,8 +24,6 @@ router.get('/', (req, res) => {
   res.json(req.query);
 });
 
-// depreciated -> to be removed
-/*
 // First Step towards token management, needs to be triggered when app starts
 router.get('/step1', (req, res) => {
   // will find the token stored in DB
@@ -53,7 +51,6 @@ router.get('/step1', (req, res) => {
     }
   });
 });
-*/
 
 // router to handle callback from server, to save tokens
 router.get('/callback', (req, res) => {
