@@ -284,13 +284,16 @@ router.post('/request', (req, res) => {
             artists: songData.artist,
             upvotes: 1,
             upvoters: [req.profile.payload.id],
+            length: songData.length,
           });
 
           // save the object to database
           track.save((e) => {
             // if any error in saving data
             if (e) {
-              logger.error(`Error saving data of id ${id}`);
+              logger.error(
+                `Error saving data of id ${id} : ${e.message}`,
+              );
               res.json({
                 error: 1,
                 message: 'Internal database Error',

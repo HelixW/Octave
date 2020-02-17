@@ -100,5 +100,5 @@ function refreshToken() {
   //   ends
 }
 
-setTimeout(refreshToken, 1000 * 2);
-setInterval(refreshToken, 1000 * 60 * 40);
+// setTimeout(refreshToken, 1000 * 2);
+// setInterval(refreshToken, 1000 * 60 * 40);

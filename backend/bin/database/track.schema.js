@@ -11,6 +11,18 @@ const track = new mongoose.Schema(
       type: String,
       required: true,
     },
+    length: {
+      type: Number,
+      required: true,
+    },
+    playing: {
+      type: Boolean,
+      default: false,
+    },
+    played: {
+      type: Boolean,
+      default: true,
+    },
     artists: [
       {
         type: String,
@@ -55,7 +67,7 @@ const track = new mongoose.Schema(
     ],
   },
   {
-    timestamps: true,
+    timestamps: false,
   },
 );
 
