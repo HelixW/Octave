@@ -1,15 +1,16 @@
 import React from 'react';
-import Button from './components/Button';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-function App() {
-  return (
-    <div className='flex flex-col w-3/4 mx-auto my-12 items-center'>
-      <h1>Super cool page</h1>
-      <Button onClick={() => console.log('I was clicked')}>
-        I am a button
-      </Button>
-    </div>
-  );
-}
+import LandingPage from './pages/LandingPage';
+
+const App = () => (
+  <>
+    <BrowserRouter>
+      <Switch>
+        <Route exact path="/" component={LandingPage} />
+      </Switch>
+    </BrowserRouter>
+  </>
+);
 
 export default App;
