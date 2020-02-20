@@ -155,7 +155,7 @@ Spotify.prototype.seed = function() {
 // config to return current player status
 Spotify.prototype.getCurrentPlayerConfig = function() {
   return {
-    method: 'POST',
+    method: 'GET',
     uri: 'https://api.spotify.com/v1/me/player',
     headers: {
       Authorization: `Bearer ${this.getAccessToken()}`,
@@ -163,6 +163,18 @@ Spotify.prototype.getCurrentPlayerConfig = function() {
   };
 };
 
-// function to return current
+// function to add song to playlist
+Spotify.prototype.addSongToPlaylist = function(songId) {
+  const uri = `spotify:track:${songId}`;
+  return {
+    method: 'POST',
+    uri: `https://api.spotify.com/v1/playlists/${process.env.SPOTIFY_PLAYLIST}/tracks`,
+    headers: {
+      Authorization: `Bearer ${this.getAccessToken()}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ uris: [uri] }),
+  };
+};
 
 module.exports = new Spotify();

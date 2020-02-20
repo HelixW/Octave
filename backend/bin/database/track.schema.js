@@ -21,7 +21,7 @@ const track = new mongoose.Schema(
     },
     played: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     artists: [
       {
