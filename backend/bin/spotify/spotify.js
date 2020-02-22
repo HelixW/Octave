@@ -72,6 +72,8 @@ Spotify.prototype.getTrackFromId = function(id) {
 
 Spotify.prototype.processTracks = function(data) {
   data = JSON.parse(data);
+  //   return data;
+
   let processedData = [];
   data.tracks.items.forEach((q) => {
     // append all artist names
@@ -94,6 +96,7 @@ Spotify.prototype.processTracks = function(data) {
       popularity: q.popularity,
       media: image,
       url: q.external_urls.spotify,
+      length: q.duration_ms,
     });
   });
   return processedData;
@@ -122,6 +125,7 @@ Spotify.prototype.processTrack = function(q) {
     popularity: q.popularity,
     media: image,
     url: q.external_urls.spotify,
+    length: q.duration_ms,
   };
 
   return processedData;
@@ -144,6 +148,33 @@ Spotify.prototype.seed = function() {
       logger.info(`Success Seeding Object`);
     }
   });
+};
+
+// automation functions
+
+// config to return current player status
+Spotify.prototype.getCurrentPlayerConfig = function() {
+  return {
+    method: 'GET',
+    uri: 'https://api.spotify.com/v1/me/player',
+    headers: {
+      Authorization: `Bearer ${this.getAccessToken()}`,
+    },
+  };
+};
+
+// function to add song to playlist
+Spotify.prototype.addSongToPlaylist = function(songId) {
+  const uri = `spotify:track:${songId}`;
+  return {
+    method: 'POST',
+    uri: `https://api.spotify.com/v1/playlists/${process.env.SPOTIFY_PLAYLIST}/tracks`,
+    headers: {
+      Authorization: `Bearer ${this.getAccessToken()}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ uris: [uri] }),
+  };
 };
 
 module.exports = new Spotify();

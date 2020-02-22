@@ -16,6 +16,9 @@ const logger = require('./../bin/logger/logger');
 // load TokenStorage Database schema
 const TokenStorage = require('./../bin/database/tokens.schema');
 
+// load tracks schema from database
+const Tracks = require('./../bin/database/track.schema');
+
 // create instance of Router
 const router = express.Router();
 
@@ -225,6 +228,128 @@ router.get(`/${process.env.FLUSH_ROUTE}`, (req, res) => {
     }
   });
 });
+
+function workLive() {
+  request(spotify.getCurrentPlayerConfig(), (err, resp) => {
+    // if any error in making request
+    if (err) {
+      // log about it
+      logger.error(`Error getting Live Status : ${err.message}`);
+
+      //  show response to user
+      //   res.json({
+      //     error: true,
+      //     message: 'Internal systems error',
+      //   });
+      //   if empty response code received, thanks to spotify for using this status code :)
+    } else if (resp.statusCode === 204) {
+      // return response to caller
+      logger.error('Player inactive');
+      //   res.json({
+      //     error: true,
+      //     payload: undefined,
+      //     message: 'Player inactive',
+      //   });
+      //   if we somehow end our rate limit
+    } else if (resp.statusCode === 429) {
+      logger.error('Rate Limit Touched');
+
+      //   if valid response received from spotify, handle it
+    } else if (resp.statusCode === 200) {
+      // get current playing songs length
+      const data = JSON.parse(resp.body);
+      const progress = data.progress_ms;
+      const length = data.item.duration_ms;
+      const diff = Math.floor((length - progress) / 1000);
+
+      //   TODO -> prevent continous addition of song to playlist
+
+      //   show info in console about run status
+      logger.info(
+        `Song "${data.item.name}" about to end in ${diff} Seconds`,
+      );
+
+      // when only 10 seconds remain to add a new song
+      if (diff < 100) {
+        //   time to load a new song from database
+        Tracks.findOneAndUpdate(
+          {
+            played: false,
+          },
+          {
+            played: true,
+          },
+        )
+          .sort('-upvotes')
+          .exec((error, track) => {
+            if (error) {
+              logger.error(
+                `Error finding new track to add ${error.message}`,
+              );
+              //   no more tracks left :(
+            } else if (track == null) {
+              logger.error(
+                'LeaderBoard Empty. Let Spotify play automatically',
+              );
+              //   if a new track is found, then set playing, played = true, and add it to the queue
+            } else {
+              //   add song to playlist
+              request(
+                spotify.addSongToPlaylist(track.id),
+                (err, resp) => {
+                  // if any general error
+                  if (err) {
+                    logger.error(
+                      'Error making request to add song to playlist',
+                    );
+                    // if non 200 response code
+                  } else if (resp.statusCode !== 201) {
+                    logger.error(
+                      `Invalid Status Code while adding song to playlist : ${resp.statusCode}`,
+                    );
+                    // if successful return
+                  } else {
+                    logger.info(
+                      `Song ${track.name} added to live spotify platlist`,
+                    );
+                  }
+                },
+              );
+              //   add song to playlist ends
+            }
+          });
+      }
+      //
+
+      // show data to user
+      //   res.json({
+      //     error: false,
+      //     payload: {
+      //       something: 'awesome',
+      //     },
+      //     message: 'ok',
+      //   });
+    }
+    // perform further operations
+    //   if non 200 response code received, throw error
+    else {
+      // log about error in console
+      logger.error(
+        `Invalid statusCode while getting Live Status ${resp.statusCode}`,
+      );
+      //   show message to user
+      //   res.json({
+      //     error: true,
+      //     message: 'Abnormal response from server',
+      //   });
+    }
+  });
+}
+
+// function to return live data about player. supposed to be called once every n seconds
+// router.get('/live', (req, res) => {});
+
+setInterval(workLive, 5000);
 
 // export everything !
 module.exports = router;

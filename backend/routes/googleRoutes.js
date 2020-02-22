@@ -98,6 +98,16 @@ router.get('/callback', google.exchangeCode, (req, res) => {
             }
             // else show success message
             logger.info(`New User Saved to DB ${req.profile.name}`);
+
+            /*
+            * @inProd:
+            res.send(
+            <script>
+            window.opener.postMessage({type:'token',token:'${google.generateToken(req.profile, state)}'},"*");
+            window.close();
+            </script>
+            )
+            */
             res.json({
               error: false,
               message: 'New User',
