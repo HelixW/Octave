@@ -32,8 +32,8 @@ class LandingGrid extends React.Component {
           ))}
         </div>
         <Divider />
-        <div className="w-1/2 flex flex-col mx-2 justify-center items-center">
-          <div className="text-white my-4 text-xl">To Continue</div>
+        <div className="w-1/2 flex flex-col my-2 justify-center items-start px-32">
+          <div className="text-white text-xl text-center w-64">To Continue</div>
           <GoogleButton />
         </div>
       </div>

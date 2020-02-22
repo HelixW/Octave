@@ -5,13 +5,34 @@
 html,
 body {
   height: 100%;
+  font-family: redHatLight, sans-serif;
+}
+
+.text-middle {
+  height: 3rem;
+  line-height: 3rem;
 }
 
 #root {
   height: 100%
 }
 
-.text-middle {
-  height: 3rem;
-  line-height: 3rem;
+@font-face {
+  font-family: redHatLight;
+  src: url('./fonts/red-hat.text.ttf')
+}
+
+@font-face {
+  font-family: redHatDisplay;
+  src: url('./fonts/red-hat.display.ttf')
+}
+
+@font-face {
+  font-family: redHatMedium;
+  src: url('./fonts/red-hat.display-medium.ttf');
+}
+
+@font-face {
+  font-family: redHatBold;
+  src: url('./fonts/red-hat.display-bold.ttf')
 }
