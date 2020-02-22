@@ -5,7 +5,7 @@ import PlayingCard from './PlayingCard';
 
 const PlayingSection = () => (
   <aside className="w-5/12 pr-10 mt-5">
-    <SectionHeader />
+    <SectionHeader>Now Playing</SectionHeader>
     <PlayingCard />
   </aside>
 );
