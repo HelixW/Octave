@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const OctaveInfo = ({ Icon, children }) => {
-  console.log(children);
   return (
     <div className="uppercase my-8 text-2xl flex justify-between items-center">
       <span className="text-white text-right w-4/5 py-auto h-10 leading-10">
@@ -16,11 +15,11 @@ const OctaveInfo = ({ Icon, children }) => {
 export default OctaveInfo;
 
 OctaveInfo.propTypes = {
-  children: PropTypes.arrayOf(PropTypes.any),
+  children: PropTypes.string,
   Icon: PropTypes.element
 };
 
 OctaveInfo.defaultProps = {
-  children: [],
+  children: '',
   Icon: '<>'
 };

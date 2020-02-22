@@ -1,5 +1,5 @@
 import React from 'react';
-import GoogleIcon from './GoogleIcon.png';
+import GoogleIcon from '../../icons/GoogleIcon.png';
 
 const GoogleButton = () => (
   <div className="bg-white flex justify-center items-middle text-middle w-64 cursor-pointer my-4">

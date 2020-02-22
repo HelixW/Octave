@@ -2,9 +2,9 @@ import React from 'react';
 
 import OctaveInfo from './OctaveInfo';
 import Divider from './Divider';
-import { ReactComponent as HeartIcon } from './HeartIcon.svg';
-import { ReactComponent as AddIcon } from './AddIcon.svg';
-import { ReactComponent as RateUpIcon } from './RateUp.svg';
+import { ReactComponent as HeartIcon } from '../../icons/HeartIcon.svg';
+import { ReactComponent as AddIcon } from '../../icons/AddIcon.svg';
+import { ReactComponent as RateUpIcon } from '../../icons/RateUp.svg';
 import GoogleButton from './GoogleButton';
 
 class LandingGrid extends React.Component {
@@ -13,9 +13,13 @@ class LandingGrid extends React.Component {
 
     this.state = {
       information: [
-        { text: 'Upvote songs you like', icon: <HeartIcon /> },
-        { text: 'Add your own songs', icon: <AddIcon /> },
-        { text: 'Top rated songs get played first', icon: <RateUpIcon /> }
+        { id: 1, text: 'Upvote songs you like', icon: <HeartIcon /> },
+        { id: 2, text: 'Add your own songs', icon: <AddIcon /> },
+        {
+          id: 3,
+          text: 'Top rated songs get played first',
+          icon: <RateUpIcon />
+        }
       ]
     };
   }
