@@ -1,5 +1,11 @@
 import React from 'react';
 
-const MainPage = () => <div className="bg-black h-full cursor-default"></div>;
+import Navbar from '../components/Navbar';
+
+const MainPage = () => (
+  <div className="bg-primary h-full cursor-default">
+    <Navbar />
+  </div>
+);
 
 export default MainPage;

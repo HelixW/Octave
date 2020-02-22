@@ -1,13 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const OctaveLogo = () => (
+const OctaveLogo = ({ height, styles }) => (
   <svg
-    width="560"
-    height="96"
+    height={height}
     viewBox="0 0 560 96"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    className="my-10"
+    className={styles}
   >
     <g clipPath="url(#clip0)">
       <path
@@ -33,3 +33,13 @@ const OctaveLogo = () => (
 );
 
 export default OctaveLogo;
+
+OctaveLogo.propTypes = {
+  height: PropTypes.string,
+  styles: PropTypes.string
+};
+
+OctaveLogo.defaultProps = {
+  height: '',
+  styles: ''
+};

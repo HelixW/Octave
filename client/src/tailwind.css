@@ -13,6 +13,18 @@ body {
   line-height: 3rem;
 }
 
+.bg-primary {
+  background-color: #111;
+}
+
+.bg-secondary {
+  background-color: #222;
+}
+
+.bg-faded {
+  background-color: #333;
+}
+
 #root {
   height: 100%
 }
