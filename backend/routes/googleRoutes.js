@@ -73,9 +73,7 @@ router.get('/callback', google.exchangeCode, (req, res) => {
 
         // if the given user doesn't exist in database, aka new user
         if (participant == null) {
-          logger.info(
-            'No Entry about User found in DB, saving right now',
-          );
+          logger.info('No Entry about User found in DB, saving right now');
 
           //  create a new participant instance
           const newParticipant = new InternalParticipant({
@@ -99,28 +97,21 @@ router.get('/callback', google.exchangeCode, (req, res) => {
             // else show success message
             logger.info(`New User Saved to DB ${req.profile.name}`);
 
-            /*
-            * @inProd:
-            res.send(
-            <script>
-            window.opener.postMessage({type:'token',token:'${google.generateToken(req.profile, state)}'},"*");
-            window.close();
-            </script>
-            )
-            */
-            res.json({
-              error: false,
-              message: 'New User',
-              token: google.generateToken(req.profile, state),
-            });
+            res.send(`<script>window.opener.postMessage({type:'token',token:'${google.generateToken(req.profile, state)}'},"*");window.close();</script>`);
+            // res.json({
+            //   error: false,
+            //   message: 'New User',
+            //   token: google.generateToken(req.profile, state),
+            // });
           });
         } else {
           logger.warn('Returning User Encountered');
-          return res.json({
-            error: false,
-            message: 'Existing User',
-            token: google.generateToken(req.profile, state),
-          });
+          res.send(`<script>window.opener.postMessage({type:'token',token:'${google.generateToken(req.profile, state)}'},"*");window.close();</script>`);
+          //   return res.json({
+          //     error: false,
+          //     message: 'Existing User',
+          //     token: google.generateToken(req.profile, state),
+          //   });
         }
       },
     );
@@ -136,62 +127,59 @@ router.get('/callback', google.exchangeCode, (req, res) => {
 
     // handle external participant information
 
-    ExternalParticipant.findOne(
-      { googleID: req.profile.id },
-      (err, participant) => {
-        // if general runtime error, display it
-        if (err) {
-          logger.error('Terminating at @googleRoutes.js#128');
-          return res.json({
-            error: true,
-            message: err,
-          });
-        }
+    ExternalParticipant.findOne({ googleID: req.profile.id }, (err, participant) => {
+      // if general runtime error, display it
+      if (err) {
+        logger.error('Terminating at @googleRoutes.js#128');
+        return res.json({
+          error: true,
+          message: err,
+        });
+      }
 
-        // if the given user doesn't exist in database, aka new user
-        if (participant == null) {
-          logger.info(
-            'No Entry about User found in DB, saving right now',
-          );
+      // if the given user doesn't exist in database, aka new user
+      if (participant == null) {
+        logger.info('No Entry about User found in DB, saving right now');
 
-          //   create new participant instance
-          const newParticipant = new ExternalParticipant({
-            googleID: req.profile.id,
-            name: req.profile.name,
-            email: req.profile.email,
-            refreshToken: req.refresh_token,
-            picture: req.profile.picture,
-          });
+        //   create new participant instance
+        const newParticipant = new ExternalParticipant({
+          googleID: req.profile.id,
+          name: req.profile.name,
+          email: req.profile.email,
+          refreshToken: req.refresh_token,
+          picture: req.profile.picture,
+        });
 
-          //   sync the newly created instance with database
-          newParticipant.save((error) => {
-            //   if any error, log to console and dispaly error
-            if (error) {
-              logger.error('Error Saving New Participant');
-              res.json({
-                error: true,
-                message: error,
-              });
-            } else {
-              // else show success message
-              logger.info(`New User Saved to DB ${req.profile.name}`);
-              res.json({
-                error: false,
-                message: 'New User',
-                token: google.generateToken(req.profile, state),
-              });
-            }
-          });
-        } else {
-          logger.warn('Returning User Encountered');
-          res.json({
-            error: false,
-            message: 'Existing User',
-            token: google.generateToken(req.profile, state),
-          });
-        }
-      },
-    );
+        //   sync the newly created instance with database
+        newParticipant.save((error) => {
+          //   if any error, log to console and dispaly error
+          if (error) {
+            logger.error('Error Saving New Participant');
+            res.json({
+              error: true,
+              message: error,
+            });
+          } else {
+            // else show success message
+            logger.info(`New User Saved to DB ${req.profile.name}`);
+            res.send(`<script>window.opener.postMessage({type:'token',token:'${google.generateToken(req.profile, state)}'},"*");window.close();</script>`);
+            // res.json({
+            //   error: false,
+            //   message: 'New User',
+            //   token: google.generateToken(req.profile, state),
+            // });
+          }
+        });
+      } else {
+        logger.warn('Returning User Encountered');
+        // res.json({
+        //   error: false,
+        //   message: 'Existing User',
+        //   token: google.generateToken(req.profile, state),
+        // });
+        res.send(`<script>window.opener.postMessage({type:'token',token:'${google.generateToken(req.profile, state)}'},"*");window.close();</script>`);
+      }
+    });
   }
 });
 

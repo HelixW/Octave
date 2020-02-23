@@ -173,17 +173,14 @@ router.get('/refresh', (req, res) => {
 
 // route to test song search
 router.get('/search', (req, res) => {
-  request(
-    spotify.searchTrack(req.query.q),
-    (error, response, body) => {
-      if (response.statusCode === 200) {
-        res.json(spotify.processTracks(body));
-      } else {
-        logger.error(`Could not search for string: ${req.query.q}`);
-        res.json(JSON.parse(body));
-      }
-    },
-  );
+  request(spotify.searchTrack(req.query.q), (error, response, body) => {
+    if (response.statusCode === 200) {
+      res.json(spotify.processTracks(body));
+    } else {
+      logger.error(`Could not search for string: ${req.query.q}`);
+      res.json(JSON.parse(body));
+    }
+  });
 });
 
 // route to display currently operational tokens
@@ -230,6 +227,7 @@ router.get(`/${process.env.FLUSH_ROUTE}`, (req, res) => {
 });
 
 function workLive() {
+  let oldId, oldName;
   request(spotify.getCurrentPlayerConfig(), (err, resp) => {
     // if any error in making request
     if (err) {
@@ -256,65 +254,67 @@ function workLive() {
 
       //   if valid response received from spotify, handle it
     } else if (resp.statusCode === 200) {
-      // get current playing songs length
       const data = JSON.parse(resp.body);
+      // get current playing songs length
+      if (data == null) {
+        logger.error('ADS !!!');
+        return;
+      }
+
       const progress = data.progress_ms;
       const length = data.item.duration_ms;
       const diff = Math.floor((length - progress) / 1000);
 
       //   TODO -> prevent continous addition of song to playlist
 
-      //   show info in console about run status
-      logger.info(
-        `Song "${data.item.name}" about to end in ${diff} Seconds`,
-      );
+      //   mark the song as "playing"
+      Tracks.updateOne({ id: data.item.id }, { playing: true }, (err) => {
+        if (err) {
+          logger.error(`Error ${err.message}`);
+        } else {
+          logger.info(`Track : ${data.item.name} : Ends in ${diff} seconds`);
+        }
+      });
 
       // when only 10 seconds remain to add a new song
-      if (diff < 100) {
+      if (diff < 10) {
         //   time to load a new song from database
-        Tracks.findOneAndUpdate(
-          {
-            played: false,
-          },
-          {
-            played: true,
-          },
-        )
+        // change status of currently playing song
+
+        // now time to mark it as "played"
+        Tracks.updateOne({ id: data.item.id }, { played: true, playing: false }, (err) => {
+          if (err) {
+            logger.error(`Error ${err.message}`);
+          } else {
+            logger.info(`Track : ${data.item.name} : play ${diff} seconds more`);
+          }
+        });
+
+        Tracks.findOne({ played: false })
           .sort('-upvotes')
           .exec((error, track) => {
             if (error) {
-              logger.error(
-                `Error finding new track to add ${error.message}`,
-              );
-              //   no more tracks left :(
+              logger.error(`Error finding new track to add ${error.message}`);
+
+              // no more tracks left :(
             } else if (track == null) {
-              logger.error(
-                'LeaderBoard Empty. Let Spotify play automatically',
-              );
+              logger.error('LeaderBoard Empty. Let Spotify play automatically');
+
               //   if a new track is found, then set playing, played = true, and add it to the queue
             } else {
               //   add song to playlist
-              request(
-                spotify.addSongToPlaylist(track.id),
-                (err, resp) => {
-                  // if any general error
-                  if (err) {
-                    logger.error(
-                      'Error making request to add song to playlist',
-                    );
-                    // if non 200 response code
-                  } else if (resp.statusCode !== 201) {
-                    logger.error(
-                      `Invalid Status Code while adding song to playlist : ${resp.statusCode}`,
-                    );
-                    // if successful return
-                  } else {
-                    logger.info(
-                      `Song ${track.name} added to live spotify platlist`,
-                    );
-                  }
-                },
-              );
+              request(spotify.addSongToPlaylist(track.id), (err, resp) => {
+                // if any general error
+                if (err) {
+                  logger.error('Error making request to add song to playlist');
+                  // if non 200 response code
+                } else if (resp.statusCode !== 201) {
+                  logger.error(`Invalid Status Code while adding song to playlist : ${resp.statusCode}`);
+                  // if successful return
+                } else {
+                  logger.info(`Track : ${track.title} : Added to Playlist`);
+                }
+              });
               //   add song to playlist ends
             }
           });
@@ -334,9 +334,7 @@ function workLive() {
     //   if non 200 response code received, throw error
     else {
       // log about error in console
-      logger.error(
-        `Invalid statusCode while getting Live Status ${resp.statusCode}`,
-      );
+      logger.error(`Invalid statusCode while getting Live Status ${resp.statusCode}`);
       //   show message to user
       //   res.json({
       //     error: true,
@@ -346,10 +344,47 @@ function workLive() {
   });
 }
 
+router.get('/test', (req, res) => {
+  let oldId = 'currentPlayingId';
+  Tracks.findOne({ played: false })
+    .sort('-upvotes')
+    .exec((error, track) => {
+      if (error) {
+        logger.error(`Error finding new track to add ${error.message}`);
+
+        // no more tracks left :(
+      } else if (track == null) {
+        logger.error('LeaderBoard Empty. Let Spotify play automatically');
+
+        //   if a new track is found, then set playing, played = true, and add it to the queue
+      } else {
+        //   add song to playlist
+        request(spotify.addSongToPlaylist(track.id), (err, resp) => {
+          // if any general error
+          if (err) {
+            logger.error('Error making request to add song to playlist');
+            // if non 200 response code
+          } else if (resp.statusCode !== 201) {
+            logger.error(`Invalid Status Code while adding song to playlist : ${resp.statusCode}`);
+            // if successful return
+          } else {
+            logger.info(`Song ${track.title} added to live spotify platlist`);
+          }
+        });
+        //   add song to playlist ends
+      }
+    });
+});
+router.get('/reset', (req, res) => {
+  res.send('CLEARED');
+  Tracks.updateMany({}, { played: false }, { multi: true }, (err) => {
+    console.log(err);
+  });
+});
+
 // function to return live data about player. supposed to be called once every n seconds
 // router.get('/live', (req, res) => {});
-
-setInterval(workLive, 5000);
+setInterval(workLive, 11 * 1000);
 
 // export everything !
 module.exports = router;
