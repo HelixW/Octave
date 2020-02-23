@@ -39,6 +39,10 @@ body {
   color: #6F6F6F;
 }
 
+.bg-contrast {
+  background-color: #48BA86;
+}
+
 .h-128 {
   height: 32rem;
 }
