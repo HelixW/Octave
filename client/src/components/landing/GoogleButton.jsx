@@ -19,7 +19,7 @@ const GoogleButton = props => {
       <div className="flex justify-center items-center mx-3 my-auto">
         <img src={GoogleIcon} alt="Google Icon" height="32px" width="32px" />
       </div>
-      <div className="mx-3">Sign in with Google</div>
+      <div className="mx-3 text-xl">Sign in with Google</div>
     </button>
   );
 };

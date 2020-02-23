@@ -11,7 +11,10 @@ class Navbar extends React.Component {
     super();
 
     this.state = {
-      isOpen: false
+      isOpen: false,
+      username: 'John Doe',
+      avatar:
+        'https://www.sackettwaconia.com/wp-content/uploads/default-profile.png'
     };
   }
 
@@ -21,7 +24,7 @@ class Navbar extends React.Component {
   }
 
   render() {
-    const { isOpen } = this.state;
+    const { isOpen, avatar, username } = this.state;
     const { history } = this.props;
     return (
       <>
@@ -36,10 +39,10 @@ class Navbar extends React.Component {
             role="button"
             tabIndex={0}
           >
-            <UserInfo />
+            <UserInfo username={username} />
           </div>
         </nav>
-        <UserDropdown isOpen={isOpen} history={history} />
+        <UserDropdown isOpen={isOpen} history={history} avatar={avatar} />
       </>
     );
   }

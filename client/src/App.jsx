@@ -1,9 +1,12 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import ProtectedRoute from './routes/ProtectedRoute';
 
+// Pages
 import LandingPage from './pages/LandingPage';
 import MainPage from './pages/MainPage';
+
+// Authentication
+import ProtectedRoute from './routes/ProtectedRoute';
 
 const App = () => (
   <>

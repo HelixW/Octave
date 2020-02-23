@@ -1,4 +1,4 @@
-// Fake authentication
+// Fake Authentication
 
 class Auth {
   constructor() {
@@ -7,12 +7,12 @@ class Auth {
 
   login(callback) {
     this.authenticated = true;
-    callback();
+    setTimeout(callback, 100); // fake async
   }
 
   logout(callback) {
     this.authenticated = false;
-    callback();
+    setTimeout(callback, 100); // fake async
   }
 
   isAuthenticated() {
