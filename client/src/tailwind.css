@@ -1,3 +1,96 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  font-family: redHatLight, sans-serif;
+}
+
+input {
+  outline-color: #48BA86;
+  outline-width: 3px;
+}
+
+.username:hover {
+  color: #48BA86;
+}
+
+.text-middle {
+  height: 3rem;
+  line-height: 3rem;
+}
+
+.bg-primary {
+  background-color: #111;
+}
+
+.bg-secondary {
+  background-color: #222;
+}
+
+.bg-faded {
+  background-color: #333;
+}
+
+.section-header {
+  font-family: redHatBold, sans-serif;
+}
+
+.song-title {
+  font-family: redHatMedium, sans-serif;
+}
+
+.text-faded {
+  color: #6F6F6F;
+}
+
+.bg-contrast {
+  background-color: #48BA86;
+}
+
+.h-128 {
+  height: 32rem;
+}
+
+::-webkit-scrollbar {
+  width: 20px;
+  z-index: 2;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #595959;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #48BA86;
+}
+
+#root {
+  height: 100%;
+  overflow: auto;
+
+}
+
+@font-face {
+  font-family: redHatLight;
+  src: url('./fonts/red-hat.text.ttf');
+}
+
+@font-face {
+  font-family: redHatDisplay;
+  src: url('./fonts/red-hat.display.ttf');
+}
+
+@font-face {
+  font-family: redHatMedium;
+  src: url('./fonts/red-hat.display-medium.ttf');
+}
+
+@font-face {
+  font-family: redHatBold;
+  src: url('./fonts/red-hat.display-bold.ttf');
+}
