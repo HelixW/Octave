@@ -1,17 +1,28 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const PlayingCard = () => (
-  <div className="bg-secondary">
-    <img
-      src="https://upload.wikimedia.org/wikipedia/en/thumb/7/73/Trevor_Daniel_-_Falling.png/220px-Trevor_Daniel_-_Falling.png"
-      alt="Album Art"
-      className="w-full p-10 pb-5"
-    />
-    <div className="mx-10 pb-5">
-      <div className="text-white text-4xl song-title">Falling</div>
-      <div className="text-white text-xl text-faded">Trevor Daniels</div>
+const PlayingCard = props => {
+  const { nowPlaying } = props;
+  return (
+    <div className="bg-secondary shadow-lg">
+      <img
+        src={nowPlaying.albumArt}
+        alt="Album Art"
+        className="w-full p-10 pb-5"
+      />
+      <div className="mx-10 pb-5">
+        <div className="text-white text-4xl song-title">{nowPlaying.title}</div>
+        <div className="text-white text-xl text-faded">{nowPlaying.artist}</div>
+      </div>
     </div>
-  </div>
-);
-
+  );
+};
 export default PlayingCard;
+
+PlayingCard.propTypes = {
+  nowPlaying: PropTypes.objectOf(PropTypes.any)
+};
+
+PlayingCard.defaultProps = {
+  nowPlaying: {}
+};

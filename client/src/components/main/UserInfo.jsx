@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import Arrow from '../Arrow';
 
 const UserInfo = props => {
-  const { username } = props;
+  const { username, isOpen } = props;
   return (
     <div className="flex justify-end items-center cursor-pointer username">
       <span className="text-xl mx-5">{username}</span>
       <span>
-        <Arrow />
+        <Arrow isOpen={isOpen} />
       </span>
     </div>
   );
@@ -18,9 +18,11 @@ const UserInfo = props => {
 export default UserInfo;
 
 UserInfo.propTypes = {
-  username: PropTypes.string
+  username: PropTypes.string,
+  isOpen: PropTypes.bool
 };
 
 UserInfo.defaultProps = {
-  username: ''
+  username: '',
+  isOpen: false
 };

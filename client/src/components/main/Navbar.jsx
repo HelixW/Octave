@@ -39,7 +39,7 @@ class Navbar extends React.Component {
             role="button"
             tabIndex={0}
           >
-            <UserInfo username={username} />
+            <UserInfo username={username} isOpen={isOpen} />
           </div>
         </nav>
         <UserDropdown isOpen={isOpen} history={history} avatar={avatar} />

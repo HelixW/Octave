@@ -10,7 +10,7 @@ const QueueSection = () => (
       <SectionHeader>Queue</SectionHeader>
       <SearchBox />
     </div>
-    <div className="overflow-y-scroll h-128">
+    <div className="overflow-y-scroll h-128 shadow-lg">
       <SongCard styles="mb-1" />
       <SongCard styles="mb-1" />
       <SongCard styles="mb-1" />
