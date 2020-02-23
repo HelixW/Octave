@@ -11,12 +11,12 @@ body {
 }
 
 input {
-  outline-color: #48BA86;
+  outline-color: #48ba86;
   outline-width: 3px;
 }
 
 .username:hover {
-  color: #48BA86;
+  color: #48ba86;
 }
 
 .text-middle {
@@ -45,11 +45,11 @@ input {
 }
 
 .text-faded {
-  color: #6F6F6F;
+  color: #6f6f6f;
 }
 
 .bg-contrast {
-  background-color: #48BA86;
+  background-color: #48ba86;
 }
 
 .h-128 {
@@ -66,13 +66,12 @@ input {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #48BA86;
+  background: #48ba86;
 }
 
 #root {
   height: 100%;
   overflow: auto;
-
 }
 
 @font-face {

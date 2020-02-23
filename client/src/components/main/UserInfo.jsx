@@ -1,5 +1,5 @@
 import React from 'react';
-import Arrow from './Arrow';
+import Arrow from '../Arrow';
 
 const UserInfo = () => (
   <div className="flex justify-end items-center cursor-pointer username">

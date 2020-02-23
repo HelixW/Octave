@@ -1,7 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-import C2CLogo from './C2CLogo';
-import OctaveLogo from './OctaveLogo';
+import C2CLogo from '../C2CLogo';
+import OctaveLogo from '../OctaveLogo';
 import UserInfo from './UserInfo';
 import UserDropdown from './UserDropdown';
 
@@ -21,6 +22,7 @@ class Navbar extends React.Component {
 
   render() {
     const { isOpen } = this.state;
+    const { history } = this.props;
     return (
       <>
         <nav className="h-20 bg-secondary text-white px-32 flex items-center">
@@ -37,10 +39,18 @@ class Navbar extends React.Component {
             <UserInfo />
           </div>
         </nav>
-        <UserDropdown isOpen={isOpen} />
+        <UserDropdown isOpen={isOpen} history={history} />
       </>
     );
   }
 }
 
 export default Navbar;
+
+Navbar.propTypes = {
+  history: PropTypes.objectOf(PropTypes.any)
+};
+
+Navbar.defaultProps = {
+  history: {}
+};

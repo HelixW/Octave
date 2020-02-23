@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import OctaveInfo from './OctaveInfo';
 import Divider from './Divider';
@@ -26,6 +27,7 @@ class LandingGrid extends React.Component {
 
   render() {
     const { information } = this.state;
+    const { history } = this.props;
     return (
       <div className="w-screen flex rotate-270">
         <div className="w-1/2 flex flex-col mx-2 my-auto">
@@ -38,7 +40,7 @@ class LandingGrid extends React.Component {
         <Divider />
         <div className="w-1/2 flex flex-col my-2 justify-center items-start px-32">
           <div className="text-white text-xl text-center w-64">To Continue</div>
-          <GoogleButton />
+          <GoogleButton history={history} />
         </div>
       </div>
     );
@@ -46,3 +48,11 @@ class LandingGrid extends React.Component {
 }
 
 export default LandingGrid;
+
+LandingGrid.propTypes = {
+  history: PropTypes.objectOf(PropTypes.any)
+};
+
+LandingGrid.defaultProps = {
+  history: {}
+};
