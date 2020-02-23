@@ -1,5 +1,6 @@
 {
-  "name": "client",
+  "name": "octave-frontend",
+  "author": "helixw",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
