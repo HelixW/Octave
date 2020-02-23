@@ -10,6 +10,15 @@ body {
   font-family: redHatLight, sans-serif;
 }
 
+input {
+  outline-color: #48BA86;
+  outline-width: 3px;
+}
+
+.username:hover {
+  color: #48BA86;
+}
+
 .text-middle {
   height: 3rem;
   line-height: 3rem;
@@ -49,6 +58,7 @@ body {
 
 ::-webkit-scrollbar {
   width: 20px;
+  z-index: 3;
 }
 
 ::-webkit-scrollbar-track {
