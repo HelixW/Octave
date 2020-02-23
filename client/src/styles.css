@@ -99,7 +99,7 @@ img {
  * 2. Remove the margin in Firefox and Safari.
  */
 
-
+button,
 input {
   font-family: inherit; /* 1 */
   font-size: 100%; /* 1 */
@@ -112,7 +112,7 @@ input {
  * 1. Show the overflow in Edge.
  */
 
-
+button,
 input { /* 1 */
   overflow: visible;
 }
@@ -122,11 +122,16 @@ input { /* 1 */
  * 1. Remove the inheritance of text transform in Firefox.
  */
 
+button { /* 1 */
+  text-transform: none;
+}
+
 /**
  * Correct the inability to style clickable types in iOS and Safari.
  */
 
-
+button,
+[type="button"],
 [type="submit"] {
   -webkit-appearance: button;
 }
@@ -135,7 +140,8 @@ input { /* 1 */
  * Remove the inner border and padding in Firefox.
  */
 
-
+button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
 [type="submit"]::-moz-focus-inner {
   border-style: none;
   padding: 0;
@@ -145,7 +151,8 @@ input { /* 1 */
  * Restore the focus styles unset by the previous rule.
  */
 
-
+button:-moz-focusring,
+[type="button"]:-moz-focusring,
 [type="submit"]:-moz-focusring {
   outline: 1px dotted ButtonText;
 }
@@ -224,10 +231,21 @@ input { /* 1 */
  * Removes the default spacing and border for appropriate elements.
  */
 
+button {
+  background-color: transparent;
+  background-image: none;
+  padding: 0;
+}
+
 /**
  * Work around a Firefox/IE bug where the transparent `button` background
  * results in a loss of the default `button` focus styles.
  */
+
+button:focus {
+  outline: 1px dotted;
+  outline: 5px auto -webkit-focus-ring-color;
+}
 
 /**
  * Tailwind custom reset styles
@@ -314,6 +332,11 @@ input::placeholder {
   color: #a0aec0;
 }
 
+button,
+[role="button"] {
+  cursor: pointer;
+}
+
 /**
  * Reset links to optimize for opt-in styling instead of
  * opt-out.
@@ -332,7 +355,7 @@ a {
  * normalize.css.
  */
 
-
+button,
 input {
   padding: 0;
   line-height: inherit;
@@ -537,6 +560,10 @@ img {
 
 .mr-24 {
   margin-right: 6rem;
+}
+
+.focus\:outline-none:focus {
+  outline: 0;
 }
 
 .overflow-auto {
