@@ -2,7 +2,7 @@
 
 class Auth {
   constructor() {
-    this.authenticated = false;
+    this.authenticated = true;
   }
 
   login(callback) {

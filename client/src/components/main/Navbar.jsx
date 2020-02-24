@@ -11,10 +11,7 @@ class Navbar extends React.Component {
     super();
 
     this.state = {
-      isOpen: false,
-      username: 'John Doe',
-      avatar:
-        'https://www.sackettwaconia.com/wp-content/uploads/default-profile.png'
+      isOpen: false
     };
   }
 
@@ -24,8 +21,8 @@ class Navbar extends React.Component {
   }
 
   render() {
-    const { isOpen, avatar, username } = this.state;
-    const { history } = this.props;
+    const { isOpen } = this.state;
+    const { history, username, avatar } = this.props;
     return (
       <>
         <nav className="h-20 bg-secondary text-white px-32 flex items-center">
@@ -51,9 +48,13 @@ class Navbar extends React.Component {
 export default Navbar;
 
 Navbar.propTypes = {
-  history: PropTypes.objectOf(PropTypes.any)
+  history: PropTypes.objectOf(PropTypes.any),
+  username: PropTypes.string,
+  avatar: PropTypes.string
 };
 
 Navbar.defaultProps = {
-  history: {}
+  history: {},
+  username: '',
+  avatar: ''
 };

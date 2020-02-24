@@ -48,12 +48,16 @@ input {
   color: #6f6f6f;
 }
 
+.text-contrast {
+  color: #48ba86;
+}
+
 .bg-contrast {
   background-color: #48ba86;
 }
 
-.h-128 {
-  height: 32rem;
+.h-queue {
+  height: 36.5vh;
 }
 
 ::-webkit-scrollbar {
