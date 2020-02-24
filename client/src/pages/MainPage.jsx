@@ -15,8 +15,7 @@ class MainPage extends React.Component {
         id: 123,
         username: 'John Doe',
         avatar:
-          'https://www.sackettwaconia.com/wp-content/uploads/default-profile.png',
-        upVotedSong: 3
+          'https://www.sackettwaconia.com/wp-content/uploads/default-profile.png'
       },
       nowPlaying: {
         id: 1,
@@ -83,31 +82,6 @@ class MainPage extends React.Component {
         }
       ]
     };
-    this.handleUpVote = this.handleUpVote.bind(this);
-  }
-
-  handleUpVote(songID) {
-    this.setState(
-      state => ({
-        user: {
-          id: state.user.id,
-          username: state.user.username,
-          avatar: state.user.avatar,
-          upVotedSong: songID
-        }
-      }),
-      () => {
-        const { user, queue } = this.state;
-
-        const newQueue = queue.slice();
-        queue.forEach((song, index) => {
-          if (song.id === user.upVotedSong) {
-            newQueue[index].upVotes += 1;
-            this.setState(() => ({ queue: newQueue }));
-          }
-        });
-      }
-    );
   }
 
   render() {
@@ -124,11 +98,7 @@ class MainPage extends React.Component {
           <PlayingSection nowPlaying={nowPlaying} />
           <div className="w-7/12 flex flex-col">
             <NextUpSection nextUp={nextUp} />
-            <QueueSection
-              queue={queue}
-              upVotedSong={user.upVotedSong}
-              handleUpVote={this.handleUpVote}
-            />
+            <QueueSection queue={queue} />
           </div>
         </div>
       </div>

@@ -7,7 +7,6 @@ import SearchBox from './SearchBox';
 
 const QueueSection = props => {
   let { queue } = props;
-  const { upVotedSong, handleUpVote } = props;
 
   queue = queue.sort((a, b) => parseFloat(b.upVotes) - parseFloat(a.upVotes));
 
@@ -19,13 +18,7 @@ const QueueSection = props => {
       </div>
       <div className="overflow-y-scroll h-queue">
         {queue.map(songInfo => (
-          <SongCard
-            styles="mb-1"
-            songInfo={songInfo}
-            key={songInfo.id}
-            upVotedSong={upVotedSong}
-            handleUpVote={handleUpVote}
-          />
+          <SongCard styles="mb-1" songInfo={songInfo} key={songInfo.id} />
         ))}
       </div>
     </section>
@@ -34,11 +27,9 @@ const QueueSection = props => {
 export default QueueSection;
 
 QueueSection.propTypes = {
-  queue: PropTypes.arrayOf(PropTypes.any),
-  upVotedSong: PropTypes.number
+  queue: PropTypes.arrayOf(PropTypes.any)
 };
 
 QueueSection.defaultProps = {
-  queue: [],
-  upVotedSong: -1
+  queue: []
 };
