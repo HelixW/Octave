@@ -12,7 +12,7 @@ class MainPage extends React.Component {
 
     this.state = {
       user: {
-        id: 123,
+        userID: 123,
         username: 'John Doe',
         avatar:
           'https://www.sackettwaconia.com/wp-content/uploads/default-profile.png'
@@ -22,14 +22,16 @@ class MainPage extends React.Component {
         title: 'Falling',
         artist: 'Trevor Daniels',
         albumArt:
-          'https://upload.wikimedia.org/wikipedia/en/thumb/7/73/Trevor_Daniel_-_Falling.png/220px-Trevor_Daniel_-_Falling.png'
+          'https://upload.wikimedia.org/wikipedia/en/thumb/7/73/Trevor_Daniel_-_Falling.png/220px-Trevor_Daniel_-_Falling.png',
+        likedBy: [11, 1231, 123]
       },
       nextUp: {
         id: 2,
         title: 'Chlorine',
         artist: 'Twenty One Pilots',
         albumArt:
-          'https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Trench_Twenty_One_Pilots.png/220px-Trench_Twenty_One_Pilots.png'
+          'https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Trench_Twenty_One_Pilots.png/220px-Trench_Twenty_One_Pilots.png',
+        likedBy: [1234]
       },
       queue: [
         {
@@ -38,7 +40,8 @@ class MainPage extends React.Component {
           artist: 'Twenty One Pilots',
           albumArt:
             'https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Trench_Twenty_One_Pilots.png/220px-Trench_Twenty_One_Pilots.png',
-          upVotes: 20
+          upVotes: 20,
+          likedBy: [123]
         },
         {
           id: 4,
@@ -46,7 +49,8 @@ class MainPage extends React.Component {
           artist: 'Twenty One Pilots',
           albumArt:
             'https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Trench_Twenty_One_Pilots.png/220px-Trench_Twenty_One_Pilots.png',
-          upVotes: 4
+          upVotes: 4,
+          likedBy: [1]
         },
         {
           id: 5,
@@ -54,7 +58,8 @@ class MainPage extends React.Component {
           artist: 'Twenty One Pilots',
           albumArt:
             'https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Trench_Twenty_One_Pilots.png/220px-Trench_Twenty_One_Pilots.png',
-          upVotes: 2
+          upVotes: 2,
+          likedBy: [123]
         },
         {
           id: 6,
@@ -62,7 +67,8 @@ class MainPage extends React.Component {
           artist: 'Twenty One Pilots',
           albumArt:
             'https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Trench_Twenty_One_Pilots.png/220px-Trench_Twenty_One_Pilots.png',
-          upVotes: 1
+          upVotes: 1,
+          likedBy: [13]
         },
         {
           id: 7,
@@ -70,7 +76,8 @@ class MainPage extends React.Component {
           artist: 'Twenty One Pilots',
           albumArt:
             'https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Trench_Twenty_One_Pilots.png/220px-Trench_Twenty_One_Pilots.png',
-          upVotes: 19
+          upVotes: 19,
+          likedBy: [123]
         },
         {
           id: 8,
@@ -78,7 +85,8 @@ class MainPage extends React.Component {
           artist: 'Twenty One Pilots',
           albumArt:
             'https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Trench_Twenty_One_Pilots.png/220px-Trench_Twenty_One_Pilots.png',
-          upVotes: 12
+          upVotes: 12,
+          likedBy: [3]
         }
       ]
     };
@@ -98,7 +106,7 @@ class MainPage extends React.Component {
           <PlayingSection nowPlaying={nowPlaying} />
           <div className="w-7/12 flex flex-col">
             <NextUpSection nextUp={nextUp} />
-            <QueueSection queue={queue} />
+            <QueueSection queue={queue} user={user} />
           </div>
         </div>
       </div>

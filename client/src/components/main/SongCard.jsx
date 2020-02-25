@@ -13,6 +13,13 @@ class SongCard extends React.Component {
     };
   }
 
+  componentDidMount() {
+    const { songInfo, user } = this.props;
+    if (songInfo.likedBy.includes(user.userID)) {
+      this.setState(() => ({ isLiked: true }));
+    }
+  }
+
   handleLike() {
     this.setState(state => ({ isLiked: !state.isLiked }));
   }
@@ -65,10 +72,12 @@ export default SongCard;
 
 SongCard.propTypes = {
   styles: PropTypes.string,
-  songInfo: PropTypes.objectOf(PropTypes.any)
+  songInfo: PropTypes.objectOf(PropTypes.any),
+  user: PropTypes.objectOf(PropTypes.any)
 };
 
 SongCard.defaultProps = {
   styles: '',
-  songInfo: {}
+  songInfo: {},
+  user: {}
 };
