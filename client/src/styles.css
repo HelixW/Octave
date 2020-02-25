@@ -189,6 +189,11 @@ button:-moz-focusring,
  * Correct the cursor style of increment and decrement buttons in Chrome.
  */
 
+[type="number"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+
 /**
  * 1. Correct the odd appearance in Chrome and Safari.
  * 2. Correct the outline style in Safari.
@@ -464,6 +469,12 @@ img {
           flex-direction: column;
 }
 
+.flex-col-reverse {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: reverse;
+          flex-direction: column-reverse;
+}
+
 .items-start {
   -webkit-box-align: start;
           align-items: flex-start;
@@ -499,6 +510,10 @@ img {
           justify-content: space-between;
 }
 
+.justify-around {
+  justify-content: space-around;
+}
+
 .font-light {
   font-weight: 300;
 }
@@ -531,6 +546,11 @@ img {
   line-height: 1;
 }
 
+.my-1 {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
 .my-2 {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
@@ -556,24 +576,19 @@ img {
   margin-right: 1.25rem;
 }
 
+.my-6 {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
 .my-8 {
   margin-top: 2rem;
   margin-bottom: 2rem;
 }
 
-.my-10 {
-  margin-top: 2.5rem;
-  margin-bottom: 2.5rem;
-}
-
 .mx-10 {
   margin-left: 2.5rem;
   margin-right: 2.5rem;
-}
-
-.my-12 {
-  margin-top: 3rem;
-  margin-bottom: 3rem;
 }
 
 .mx-32 {
@@ -588,6 +603,10 @@ img {
 
 .mb-1 {
   margin-bottom: 0.25rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
 }
 
 .ml-4 {
@@ -616,6 +635,10 @@ img {
 
 .overflow-auto {
   overflow: auto;
+}
+
+.overflow-x-hidden {
+  overflow-x: hidden;
 }
 
 .overflow-y-scroll {
@@ -713,16 +736,16 @@ img {
   text-align: center;
 }
 
-.text-right {
-  text-align: right;
-}
-
 .text-white {
   color: #fff;
 }
 
 .text-green-600 {
   color: #38a169;
+}
+
+.text-sm {
+  font-size: 0.875rem;
 }
 
 .text-base {
@@ -749,12 +772,8 @@ img {
   text-transform: uppercase;
 }
 
-.w-64 {
-  width: 16rem;
-}
-
-.w-1\/2 {
-  width: 50%;
+.w-48 {
+  width: 12rem;
 }
 
 .w-1\/3 {
@@ -767,10 +786,6 @@ img {
 
 .w-1\/5 {
   width: 20%;
-}
-
-.w-4\/5 {
-  width: 80%;
 }
 
 .w-1\/12 {
@@ -911,4 +926,71 @@ input {
   font-family: redHatBold;
 
   src: url('./fonts/red-hat.display-bold.ttf');
+}
+
+@media (min-width: 870px) {
+
+  .sm\:flex-row {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+            flex-direction: row;
+  }
+
+  .sm\:justify-evenly {
+    -webkit-box-pack: space-evenly;
+            justify-content: space-evenly;
+  }
+
+  .sm\:my-4 {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .sm\:text-right {
+    text-align: right;
+  }
+
+  .sm\:w-1\/2 {
+    width: 50%;
+  }
+
+  .sm\:w-4\/5 {
+    width: 80%;
+  }
+}
+
+@media (min-width: 1140px) {
+
+  .md\:my-4 {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .md\:text-xl {
+    font-size: 1.25rem;
+  }
+
+  .md\:text-3xl {
+    font-size: 1.875rem;
+  }
+
+  .md\:w-64 {
+    width: 16rem;
+  }
+}
+
+@media (min-width: 1600px) {
+
+  .lg\:my-8 {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .lg\:text-2xl {
+    font-size: 1.5rem;
+  }
+
+  .lg\:text-4xl {
+    font-size: 2.25rem;
+  }
 }

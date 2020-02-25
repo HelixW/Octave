@@ -24,7 +24,7 @@ class Navbar extends React.Component {
     const { isOpen } = this.state;
     const { history, username, avatar } = this.props;
     return (
-      <>
+      <div className="relative">
         <nav className="h-20 bg-secondary text-white px-32 flex items-center">
           <div className="flex justify-start w-1/3">
             <C2CLogo height="50" />
@@ -40,7 +40,7 @@ class Navbar extends React.Component {
           </div>
         </nav>
         <UserDropdown isOpen={isOpen} history={history} avatar={avatar} />
-      </>
+      </div>
     );
   }
 }
