@@ -5,6 +5,7 @@ import SectionHeader from './SectionHeader';
 import SongCard from './SongCard';
 import SearchBox from './SearchBox';
 import SearchCard from './SearchCard';
+import EmptySearchCard from './EmptySearchCard';
 
 class QueueSection extends React.Component {
   constructor() {
@@ -36,14 +37,18 @@ class QueueSection extends React.Component {
             <SearchBox />
             <div className={isOpen ? '' : 'hidden'}>
               <div className="bg-lighter-primary absolute w-full border-solid border-4 border-lighter-primary">
-                {songSearch.map(songInfo => (
-                  <SearchCard
-                    songInfo={songInfo}
-                    key={songInfo.id}
-                    queue={queue}
-                    handleClick={this.handleClick}
-                  />
-                ))}
+                {songSearch.length > 0 ? (
+                  songSearch.map(songInfo => (
+                    <SearchCard
+                      songInfo={songInfo}
+                      key={songInfo.id}
+                      queue={queue}
+                      handleClick={this.handleClick}
+                    />
+                  ))
+                ) : (
+                  <EmptySearchCard handleClick={this.handleClick} />
+                )}
               </div>
             </div>
           </div>

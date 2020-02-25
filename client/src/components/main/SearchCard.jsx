@@ -36,10 +36,12 @@ export default SearchCard;
 
 SearchCard.propTypes = {
   songInfo: PropTypes.objectOf(PropTypes.any),
-  queue: PropTypes.arrayOf(PropTypes.any)
+  queue: PropTypes.arrayOf(PropTypes.any),
+  handleClick: PropTypes.func
 };
 
 SearchCard.defaultProps = {
   songInfo: {},
-  queue: []
+  queue: [],
+  handleClick: () => []
 };
