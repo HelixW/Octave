@@ -39,7 +39,7 @@ class SongCard extends React.Component {
             <div className="text-white song-title text-2xl">
               {songInfo.title}
             </div>
-            <div className="text-faded text-xl">{songInfo.artist}</div>
+            <div className="text-faded text-xl">{songInfo.artists}</div>
           </div>
         </div>
       );
@@ -50,7 +50,9 @@ class SongCard extends React.Component {
       >
         <div>
           <div className="text-white song-title text-2xl">{songInfo.title}</div>
-          <div className="text-faded text-xl">{songInfo.artist}</div>
+          <div className="text-faded text-xl">
+            {songInfo.artists.join(', ')}
+          </div>
         </div>
         <div className="flex text-2xl text-contrast">
           <div>{songInfo.upVotes}</div>

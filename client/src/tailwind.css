@@ -60,6 +60,18 @@ input {
   height: 36.5vh;
 }
 
+.width-inherit {
+  width: inherit;
+}
+
+.bg-lighter-primary {
+  background-color: #222;
+}
+
+.border-lighter-primary {
+  border-color: #222;
+}
+
 ::-webkit-scrollbar {
   width: 20px;
   z-index: 2;

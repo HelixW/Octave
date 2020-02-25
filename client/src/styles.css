@@ -225,6 +225,10 @@ button:-moz-focusring,
  * Add the correct display in IE 10.
  */
 
+[hidden] {
+  display: none;
+}
+
 /**
  * Manually forked from SUIT CSS Base: https://github.com/suitcss/base
  * A thin layer on top of normalize.css that provides a starting point more
@@ -403,6 +407,10 @@ img {
   background-color: #fff;
 }
 
+.hover\:bg-transparent:hover {
+  background-color: transparent;
+}
+
 .hover\:bg-gray-300:hover {
   background-color: #e2e8f0;
 }
@@ -413,6 +421,14 @@ img {
 
 .rounded-full {
   border-radius: 9999px;
+}
+
+.border-solid {
+  border-style: solid;
+}
+
+.border-4 {
+  border-width: 4px;
 }
 
 .box-border {
@@ -432,6 +448,16 @@ img {
   display: flex;
 }
 
+.hidden {
+  display: none;
+}
+
+.flex-row {
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+          flex-direction: row;
+}
+
 .flex-col {
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
@@ -446,6 +472,11 @@ img {
 .items-center {
   -webkit-box-align: center;
           align-items: center;
+}
+
+.items-stretch {
+  -webkit-box-align: stretch;
+          align-items: stretch;
 }
 
 .justify-start {
@@ -575,6 +606,10 @@ img {
   margin-right: 8rem;
 }
 
+.opacity-0 {
+  opacity: 0;
+}
+
 .focus\:outline-none:focus {
   outline: 0;
 }
@@ -585,6 +620,10 @@ img {
 
 .overflow-y-scroll {
   overflow-y: scroll;
+}
+
+.p-4 {
+  padding: 1rem;
 }
 
 .p-10 {
@@ -658,6 +697,10 @@ img {
   position: absolute;
 }
 
+.relative {
+  position: relative;
+}
+
 .right-0 {
   right: 0;
 }
@@ -680,6 +723,10 @@ img {
 
 .text-green-600 {
   color: #38a169;
+}
+
+.text-base {
+  font-size: 1rem;
 }
 
 .text-xl {
@@ -822,6 +869,14 @@ input {
 
 .h-queue {
   height: 36.5vh;
+}
+
+.bg-lighter-primary {
+  background-color: #222;
+}
+
+.border-lighter-primary {
+  border-color: #222;
 }
 
 ::-webkit-scrollbar {

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { v1 as uuid } from 'uuid';
 
 import Navbar from '../components/main/Navbar';
 import PlayingSection from '../components/main/PlayingSection';
@@ -18,75 +19,92 @@ class MainPage extends React.Component {
           'https://www.sackettwaconia.com/wp-content/uploads/default-profile.png'
       },
       nowPlaying: {
-        id: 1,
+        id: uuid(),
         title: 'Falling',
-        artist: 'Trevor Daniels',
+        artists: ['Trevor Daniels'],
         albumArt:
           'https://upload.wikimedia.org/wikipedia/en/thumb/7/73/Trevor_Daniel_-_Falling.png/220px-Trevor_Daniel_-_Falling.png',
         likedBy: [11, 1231, 123]
       },
       nextUp: {
-        id: 2,
+        id: uuid(),
         title: 'Chlorine',
-        artist: 'Twenty One Pilots',
+        artists: ['Twenty One Pilots'],
         albumArt:
           'https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Trench_Twenty_One_Pilots.png/220px-Trench_Twenty_One_Pilots.png',
         likedBy: [1234]
       },
       queue: [
         {
-          id: 3,
+          id: 1,
           title: 'Chlorine',
-          artist: 'Twenty One Pilots',
+          artists: ['Twenty One Pilots'],
           albumArt:
             'https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Trench_Twenty_One_Pilots.png/220px-Trench_Twenty_One_Pilots.png',
           upVotes: 20,
           likedBy: [123]
         },
         {
-          id: 4,
+          id: uuid(),
           title: 'Chlorine',
-          artist: 'Twenty One Pilots',
+          artists: ['Twenty One Pilots'],
           albumArt:
             'https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Trench_Twenty_One_Pilots.png/220px-Trench_Twenty_One_Pilots.png',
           upVotes: 4,
           likedBy: [1]
         },
         {
-          id: 5,
+          id: uuid(),
           title: 'Chlorine',
-          artist: 'Twenty One Pilots',
+          artists: ['Twenty One Pilots'],
           albumArt:
             'https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Trench_Twenty_One_Pilots.png/220px-Trench_Twenty_One_Pilots.png',
           upVotes: 2,
           likedBy: [123]
         },
         {
-          id: 6,
+          id: uuid(),
           title: 'Chlorine',
-          artist: 'Twenty One Pilots',
+          artists: ['Twenty One Pilots'],
           albumArt:
             'https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Trench_Twenty_One_Pilots.png/220px-Trench_Twenty_One_Pilots.png',
           upVotes: 1,
           likedBy: [13]
         },
         {
-          id: 7,
+          id: uuid(),
           title: 'Chlorine',
-          artist: 'Twenty One Pilots',
+          artists: ['Twenty One Pilots'],
           albumArt:
             'https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Trench_Twenty_One_Pilots.png/220px-Trench_Twenty_One_Pilots.png',
           upVotes: 19,
           likedBy: [123]
         },
         {
-          id: 8,
+          id: uuid(),
           title: 'Chlorine',
-          artist: 'Twenty One Pilots',
+          artists: ['Twenty One Pilots'],
           albumArt:
             'https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Trench_Twenty_One_Pilots.png/220px-Trench_Twenty_One_Pilots.png',
           upVotes: 12,
           likedBy: [3]
+        }
+      ],
+
+      songSearch: [
+        {
+          id: 1,
+          title: 'Closer (feat. Halsey)',
+          artists: ['The Chainsmokers', 'Halsey'],
+          albumArt:
+            'https://i.scdn.co/image/ab67616d0000b273495ce6da9aeb159e94eaa453'
+        },
+        {
+          id: uuid(),
+          title: 'Closer',
+          artists: ['Mickey Singh', 'Dilpreet Dhillon'],
+          albumArt:
+            'https://i.scdn.co/image/ab67616d0000b2733e6b572922169a736610f5c1'
         }
       ]
     };
@@ -94,7 +112,7 @@ class MainPage extends React.Component {
 
   render() {
     const { history } = this.props;
-    const { user, nowPlaying, nextUp, queue } = this.state;
+    const { user, nowPlaying, nextUp, queue, songSearch } = this.state;
     return (
       <div className="bg-primary h-full cursor-default overflow-auto">
         <Navbar
@@ -106,7 +124,7 @@ class MainPage extends React.Component {
           <PlayingSection nowPlaying={nowPlaying} />
           <div className="w-7/12 flex flex-col">
             <NextUpSection nextUp={nextUp} />
-            <QueueSection queue={queue} user={user} />
+            <QueueSection queue={queue} user={user} songSearch={songSearch} />
           </div>
         </div>
       </div>
